@@ -42,16 +42,21 @@ main.Show(Format('w{} h{}', A_ScreenWidth * 0.6, A_ScreenHeight * 0.6))
 exec_sync := SyncHandler((args) => OutputDebug(StrGet(args[2])))
 
 wvc := WebView2.create(main.Hwnd)
+;使webview在gui中focus
+wvc.MoveFocus(0)
 wv := wvc.CoreWebView2
 ;wv.add_NavigationCompleted(nav_sync)
 wv.Navigate('file:///' A_ScriptDir '/test.html')
 wv.AddHostObjectToScript('ahk', {str:'str from ahk',func:MsgBox})
 ;wv.ExecuteScript('window.mytest="wang"', WebView2.Handler(handler))
 ;nav_sync.wait()
+
+
 ;wv.OpenDevToolsWindow()
 script := 'window.mytest="data:img/jpg;base64,' imgbase '";'
 wv.AddScriptToExecuteOnDocumentCreated('window.addEventListener("load",(event)=>{ ' script 'init() })', exec_sync)
  exec_sync.wait()
+ 
 
 handler(handlerptr, result, success) {
 	if (!success)
@@ -69,6 +74,7 @@ getIconBase64FromProcess(WinTitle){
     Path := WinGetProcessPath(WinTitle)
     handle := LoadPicture(Path ,"w32")
     imgbase:=ImagePutBase64(handle)
+	return imgbase
 }
 
 f1::main.Hide()

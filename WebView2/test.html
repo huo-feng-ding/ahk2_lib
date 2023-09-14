@@ -5,12 +5,24 @@
     <title>新标签页</title>
   <link href="http://unpkg.com/layui@2.8.17/dist/css/layui.css" rel="stylesheet">
     <script>
-/*         window.addEventListener('load',(event)=>{
+        window.addEventListener('load',(event)=>{
             console.log('load')
-        }) */
+            document.getElementById('iput').focus()
+        })
+        let n=0
         function init(){
             console.log(window.mytest)
             document.getElementById('image').src = window.mytest
+            document.addEventListener(
+              "keydown",
+              (event) => {
+                const keyName = event.key;
+                console.log('keypress', keyName)
+data.forEach(d=>{d.LAY_CHECKED = false})
+                data[n++%data.length].LAY_CHECKED = true
+                inst.reload()
+              },
+              false)
         }
         async function show() {
             alert(window.mytest)
@@ -21,27 +33,13 @@
 </head>
 
 <body>
-
+<input id="iput" type="text" />
     <img id="image" />
 <table class="layui-hide" id="ID-table-demo-data"></table>
 
 <script src="http://unpkg.com/layui@2.8.17/dist/layui.js"></script>
 <script>
-layui.use('table', function(){
-  var table = layui.table;
-  
-  // 已知数据渲染
-  var inst = table.render({
-    elem: '#ID-table-demo-data',
-    cols: [[ //标题栏
-      {field: 'id', title: 'ID', width: 80, sort: true},
-      {field: 'username', title: '用户', width: 120},
-      {field: 'sign', title: '签名', minWidth: 160},
-      {field: 'sex', title: '性别', width: 80},
-      {field: 'city', title: '城市', width: 100},
-      {field: 'experience', title: '积分', width: 80, sort: true}
-    ]],
-    data: [{ // 赋值已知数据
+let data = [{ // 赋值已知数据
       "id": "10001",
       "username": "张三1",
       "sex": "男",
@@ -98,12 +96,29 @@ layui.use('table', function(){
       "city": "浙江杭州",
       "sign": "人生恰似一场修行",
       "experience": "106"
-    }],
+    }]
+let inst
+layui.use('table', function(){
+  var table = layui.table;
+
+  
+  // 已知数据渲染
+  inst = table.render({
+    elem: '#ID-table-demo-data',
+    cols: [[ //标题栏
+      {field: 'id', title: 'ID', width: 80, sort: true},
+      {field: 'username', title: '用户', width: 120},
+      {field: 'sign', title: '签名', minWidth: 160},
+      {field: 'sex', title: '性别', width: 80},
+      {field: 'city', title: '城市', width: 100},
+      {field: 'experience', title: '积分', width: 80, sort: true}
+    ]],
+    data: data,
     //skin: 'line', // 表格风格
     //even: true,
     page: true, // 是否显示分页
     limits: [5, 10, 15],
-    limit: 5 // 每页默认显示的数量
+    limit: 10 // 每页默认显示的数量
   });
 });
 </script>
